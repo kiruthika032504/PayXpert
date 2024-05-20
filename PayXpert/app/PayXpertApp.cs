@@ -1,4 +1,4 @@
-﻿using PayXpert.exception;
+using PayXpert.exception;
 using PayXpert.model;
 using PayXpert.report;
 using PayXpert.service;
@@ -37,11 +37,15 @@ namespace PayXpert.app
                         loggedIn = LoginUser(_iuserService);
                         break;
                     case 3:
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Exiting...");
+                        Console.ResetColor();
                         Environment.Exit(0);
                         break;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid option. Please choose again.");
+                        Console.ResetColor();
                         break;
                 }
             }
@@ -77,10 +81,14 @@ namespace PayXpert.app
                         GenerateReportsMenu();
                         break;
                     case 0:
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("Exiting program...");
+                        Console.ResetColor();
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -96,12 +104,16 @@ namespace PayXpert.app
 
             if (userService.IsUsernameExists(newUsername))
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Username already exists. Please choose a different one.");
+                Console.ResetColor();
             }
             else
             {
                 userService.RegisterUser(newUsername, newPassword);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("User registered successfully!");
+                Console.ResetColor();
             }
         }
 
@@ -114,12 +126,16 @@ namespace PayXpert.app
 
             if (userService.IsLoginValid(username, password))
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Login successful!");
+                Console.ResetColor();
                 return true;
             }
             else
             {
+                Console.ForegroundColor= ConsoleColor.Red;
                 Console.WriteLine(new InvalidInputException("Invalid username or password. Please try again."));
+                Console.ResetColor();
                 return false;
             }
         }
@@ -158,7 +174,9 @@ namespace PayXpert.app
                     case 0:
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -197,7 +215,9 @@ namespace PayXpert.app
                     case 0:
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -236,7 +256,9 @@ namespace PayXpert.app
                     case 0:
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -275,7 +297,9 @@ namespace PayXpert.app
                     case 0:
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -285,7 +309,7 @@ namespace PayXpert.app
 
         private void GenerateReportsMenu()
         {
-            var payrolls = new List<Payroll>();
+            List<Payroll> payrolls = new List<Payroll>();
             var taxes = new List<Tax>();
             var financialRecords = new List<FinancialRecord>();
             var reportGenerator = new ReportGenerator();
@@ -298,15 +322,19 @@ namespace PayXpert.app
                 Console.WriteLine("0. Back to Main Menu");
 
                 Console.Write("Enter your Choice: ");
-                int choice = int.Parse(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    Console.WriteLine("Invalid input. Please enter a number.");
+                    continue;
+                }
 
                 switch (choice)
                 {
-                    case 18:
-                        reportGenerator.GeneratePayrollReport(payrolls);
+                    case 18:                        
+                        reportGenerator.GeneratePayrollReport(payrolls);                        
                         break;
-                    case 19:
-                        reportGenerator.GenerateTaxReport(taxes);
+                    case 19:                        
+                        reportGenerator.GenerateTaxReport(taxes);                        
                         break;
                     case 20:
                         reportGenerator.GenerateFinancialRecordReport(financialRecords);
@@ -314,7 +342,9 @@ namespace PayXpert.app
                     case 0:
                         return;
                     default:
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ResetColor();
                         break;
                 }
 
@@ -347,16 +377,22 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Employee not found.");
+                    Console.ResetColor();
                 }
             }
             catch (EmployeeNotFoundException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch(Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -386,16 +422,22 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No employees found.");
+                    Console.ResetColor();
                 }
             }
             catch (EmployeeNotFoundException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();   
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -454,40 +496,56 @@ namespace PayXpert.app
 
                                     // Call _employeeService.AddEmployee(employeeData)
                                     _employeeService.AddEmployee(employee);
+                                    Console.ForegroundColor = ConsoleColor.Green;
                                     Console.WriteLine("Employee added successfully.");
+                                    Console.ResetColor();
                                 }
                                 else
                                 {
+                                    Console.ForegroundColor = ConsoleColor.Red;
                                     Console.WriteLine("Joining Date must be before the current date.");
+                                    Console.ResetColor();
                                 }
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Invalid Joining Date format.");
+                                Console.ResetColor();
                             }
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Invalid Phone Number format.");
+                            Console.ResetColor();
                         }
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid Email format.");
+                        Console.ResetColor();
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid Date of Birth format.");
+                    Console.ResetColor();
                 }
             }
             catch (InvalidInputException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -561,30 +619,42 @@ namespace PayXpert.app
                                 // Call _employeeService.UpdateEmployee(updatedEmployee)
                                 _employeeService.UpdateEmployee(updatedEmployee);
                             }
+                            Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Employee updated successfully.");
+                            Console.ResetColor();
                         }
                         else
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Invalid Joining Date format.");
+                            Console.ResetColor();
                         }
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("Invalid Date of Birth format.");
+                        Console.ResetColor();
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Employee not found.");
+                    Console.ResetColor();
                 }
             }
             catch (InvalidInputException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -596,11 +666,15 @@ namespace PayXpert.app
                 int employeeId = int.Parse(Console.ReadLine());
                 // Call _employeeService.RemoveEmployee(employeeId)
                 _employeeService.RemoveEmployee(employeeId);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Employee removed successfully.");
+                Console.ResetColor();
             }
             catch (EmployeeNotFoundException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -630,21 +704,29 @@ namespace PayXpert.app
                 // Validate the date range
                 if(startDate > endDate)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(new InvalidInputException("Start Date must not exceed End Date"));
+                    Console.ResetColor();
                 }
                 else if(startDate > DateTime.Now)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(new InvalidDataException("Pay Period Start and End Date must not exceed Today's date"));
+                    Console.ResetColor();
                     goto startDate;
                 }
                 else if(endDate > DateTime.Now)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(new InvalidDataException("Pay Period Start and End Date must not exceed Today's date"));
+                    Console.ResetColor();
                     goto endDate;
                 }
                 else if ((endDate - startDate).Days > 31)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(new InvalidInputException("The pay period duration should not exceed one month."));
+                    Console.ResetColor();
                 }
                 Console.WriteLine("Enter Basic Salary:");
                 decimal basicSalary = decimal.Parse(Console.ReadLine());
@@ -666,15 +748,21 @@ namespace PayXpert.app
                 }
                 // Call _payrollService.GeneratePayroll(employeeId, startDate, endDate)
                 _payrollService.GeneratePayroll(employeeId, basicSalary, deductions, RA, DA, overtimeHrs, startDate, endDate);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Payroll generated successfully.");
+                Console.ResetColor();
             }
             catch (PayrollGenerationException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -700,12 +788,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Payroll not found.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -734,12 +826,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No payrolls found for the employee.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -769,12 +865,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No payrolls found for the specified period.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -790,7 +890,9 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine("Invalid date format. Please enter a valid date (YYYY-MM-DD).");
+                    Console.ResetColor();
                 }
             }
         }
@@ -806,15 +908,21 @@ namespace PayXpert.app
 
                 // Call _taxService.CalculateTax(employeeId, taxYear)
                 _taxService.CalculateTax(employeeId, taxYear);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Tax calculated successfully.");
+                Console.ResetColor();
             }
             catch (TaxCalculationException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -837,12 +945,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Tax not found.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -869,12 +981,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No taxes found for the employee.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -900,12 +1016,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No taxes found for the specified year.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -926,15 +1046,21 @@ namespace PayXpert.app
 
                 // Call _financialRecordService.AddFinancialRecord(employeeId, description, amount, recordType)
                 _financialRecordService.AddFinancialRecord(employeeId, description, amount, recordType);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Financial record added successfully.");
+                Console.ResetColor();
             }
             catch (FinancialRecordException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -957,16 +1083,22 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Financial record not found.");
+                    Console.ResetColor();
                 }
             }
             catch (FinancialRecordException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -993,16 +1125,22 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No financial records found for the employee.");
+                    Console.ResetColor();
                 }
             }
             catch (FinancialRecordException ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {e.Message}");
+                Console.ResetColor();
             }
         }
 
@@ -1027,12 +1165,16 @@ namespace PayXpert.app
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("No financial records found for the specified date.");
+                    Console.ResetColor();
                 }
             }
             catch (Exception ex)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Error: {ex.Message}");
+                Console.ResetColor();
             }
         }
     }
